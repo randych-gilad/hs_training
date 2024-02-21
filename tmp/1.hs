@@ -4,9 +4,11 @@ toList :: Maybe a -> [a]
 toList Nothing = []
 toList (Just x) = [x]
 
+concat' :: [[a]] -> [a]
 concat' [] = []
 concat' (x:xs) = x ++ concat' xs
 
+foldr'' :: (a -> a -> a) -> a -> [Maybe a] -> a
 foldr'' _ start [] = start
 foldr'' f start (Nothing:xs) = foldr'' f start xs
 foldr'' f start [Just x] = f start x
