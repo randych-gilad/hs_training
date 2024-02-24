@@ -1,10 +1,11 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 
 module Manifest where
 
 import GHC.Generics (Generic)
-import Data.Aeson (ToJSON, toJSON, omitNothingFields, genericToJSON, defaultOptions)
-import qualified Data.ByteString.Internal as BL
+import Data.Aeson.Key (fromString)
+import Data.Aeson (ToJSON, toJSON, toJSONKey, omitNothingFields, genericToJSON, defaultOptions, object, (.=))
 
 data Manifest = Manifest
   {
@@ -30,7 +31,7 @@ data Spec = Spec
   }
   | SpecTemplate
   { imagePullSecrets :: [ImagePullSecret]
-  -- , nodeSelector :: HashMap Text Text
+  , nodeSelector :: NodeSelector
   } deriving (Generic, Show)
 newtype ImagePullSecret = ImagePullSecret
   { name :: String }
@@ -49,6 +50,9 @@ data Template = Template
   , spec :: Spec }
   deriving (Generic, Show)
 
+newtype NodeSelector = NodeSelector String
+  deriving (Generic, Show)
+
 instance ToJSON Manifest where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
 instance ToJSON Metadata where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
 instance ToJSON Spec where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
@@ -56,6 +60,4 @@ instance ToJSON MatchLabels where toJSON = genericToJSON defaultOptions { omitNo
 instance ToJSON Selector where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
 instance ToJSON Template where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
 instance ToJSON ImagePullSecret where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
-
-
-
+instance ToJSON NodeSelector where toJSON (NodeSelector val) = object [fromString ("node-role.kubernetes.io/" ++ val) .= val]

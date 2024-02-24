@@ -5,22 +5,18 @@
 module Main (main) where
 
 import Data.Yaml ( encode )
-import Data.HashMap.Strict (fromList)
-import Data.Text (Text)
--- import qualified Data.ByteString.Lazy.Char8 as BL
-import qualified Data.ByteString.Internal as BL
+import Data.ByteString.Internal ( unpackChars )
 import Manifest
-    ( Manifest(template, Manifest, apiVersion, metadata, kind, spec),
+    ( ImagePullSecret(name, ImagePullSecret),
+      Manifest(template, Manifest, apiVersion, metadata, kind, spec),
       MatchLabels(app, MatchLabels),
       Metadata(matchLabels, Metadata, namespace, name, MetadataTemplate),
       Selector(matchLabels, Selector),
-      Spec(imagePullSecrets, Spec, replicas, revisionHistoryLimit,
-           selector, SpecTemplate),
+      Spec(nodeSelector, Spec, replicas, revisionHistoryLimit, selector,
+           SpecTemplate, imagePullSecrets),
       Template(spec, Template, metadata),
-      ImagePullSecret(name, ImagePullSecret) )
+      NodeSelector(NodeSelector) )
 
--- megakek = Data.Yaml.encode $ fromList[("infra", "infra")] 
--- ambigous type varibllellelle even with BL.ByteString
 main :: IO ()
 main = do
   let manifest    = Manifest { apiVersion = "apps/v1", 
@@ -37,9 +33,9 @@ main = do
                     , spec      = SpecTemplate 
                                   { imagePullSecrets = 
                                     [ImagePullSecret { name = "kekus-secret"}]
-                                  -- , nodeSelector = fromList[("infra", "infra")] -- doesn't work
+                                  , nodeSelector = NodeSelector "kekus"
                                   }
                     }
     }
   -- BL.putStrLn (Data.Yaml.encode manifest)
-  putStrLn $ BL.unpackChars $ Data.Yaml.encode manifest
+  putStrLn $ unpackChars $ encode manifest
