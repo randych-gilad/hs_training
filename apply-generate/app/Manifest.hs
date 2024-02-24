@@ -12,7 +12,7 @@ data Manifest = Manifest
 
 data Metadata = Metadata
   { name :: String
-  , namespace :: Maybe String
+  , namespace :: String
   } deriving (Show, Generic)
 
 instance ToJSON Manifest where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }

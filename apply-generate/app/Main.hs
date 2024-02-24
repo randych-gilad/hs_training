@@ -11,8 +11,8 @@ import Manifest
 main :: IO ()
 main = do
   let manifest =  Manifest {kind = "Deployment", 
-      metadata =  let namespace = Nothing
-                      name = "kekus-web"
+      metadata =  let namespace = "kekus"
+                      name = namespace ++ "-web"
                   in Metadata {namespace, name}
   , apiVersion = "apps/v1"}
   -- BL.putStrLn (Data.Yaml.encode manifest)
