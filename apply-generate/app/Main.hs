@@ -37,5 +37,4 @@ main = do
                                   }
                     }
     }
-  -- BL.putStrLn (Data.Yaml.encode manifest)
-  putStrLn $ unpackChars $ encode manifest
+  putStrLn . unpackChars . encode $ manifest
