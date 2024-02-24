@@ -4,6 +4,7 @@ module Manifest where
 
 import GHC.Generics (Generic)
 import Data.Aeson (ToJSON, toJSON, omitNothingFields, genericToJSON, defaultOptions)
+import qualified Data.ByteString.Internal as BL
 
 data Manifest = Manifest
   {
@@ -12,33 +13,41 @@ data Manifest = Manifest
   , metadata :: Metadata
   , spec :: Spec
   , template :: Template
-  } deriving (Show, Generic)
+  } deriving (Generic, Show)
 
 data Metadata = Metadata
   { name :: String
   , namespace :: String
-  } | MetadataTemplate
+  }
+  | MetadataTemplate
   { matchLabels :: MatchLabels }
-  deriving (Show, Generic)
+  deriving (Generic, Show)
 
 data Spec = Spec
   { replicas :: Int
   , revisionHistoryLimit :: Int
   , selector :: Selector
-  } deriving (Show, Generic)
-
+  }
+  | SpecTemplate
+  { imagePullSecrets :: [ImagePullSecret]
+  -- , nodeSelector :: HashMap Text Text
+  } deriving (Generic, Show)
+newtype ImagePullSecret = ImagePullSecret
+  { name :: String }
+  deriving (Generic, Show)
 
 newtype Selector = Selector
   { matchLabels :: MatchLabels }
-  deriving (Show, Generic)
+  deriving (Generic, Show)
 
 newtype MatchLabels = MatchLabels
   { app :: String }
-  deriving (Show, Generic)
+  deriving (Generic, Show)
 
-newtype Template = Template
-  { metadata :: Metadata }
-  deriving (Show, Generic)
+data Template = Template
+  { metadata :: Metadata 
+  , spec :: Spec }
+  deriving (Generic, Show)
 
 instance ToJSON Manifest where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
 instance ToJSON Metadata where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
@@ -46,4 +55,7 @@ instance ToJSON Spec where toJSON = genericToJSON defaultOptions { omitNothingFi
 instance ToJSON MatchLabels where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
 instance ToJSON Selector where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
 instance ToJSON Template where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
+instance ToJSON ImagePullSecret where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
+
+
 
