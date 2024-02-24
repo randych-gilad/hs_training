@@ -11,15 +11,14 @@ data Manifest = Manifest
   , kind :: String
   , metadata :: Metadata
   , spec :: Spec
+  , template :: Template
   } deriving (Show, Generic)
 
 data Metadata = Metadata
   { name :: String
   , namespace :: String
   } | MetadataTemplate
-  { 
-    labels :: MatchLabels
-  }
+  { matchLabels :: MatchLabels }
   deriving (Show, Generic)
 
 data Spec = Spec
@@ -36,12 +35,15 @@ newtype Selector = Selector
 newtype MatchLabels = MatchLabels
   { app :: String }
   deriving (Show, Generic)
+
 newtype Template = Template
   { metadata :: Metadata }
+  deriving (Show, Generic)
 
 instance ToJSON Manifest where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
 instance ToJSON Metadata where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
 instance ToJSON Spec where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
 instance ToJSON MatchLabels where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
 instance ToJSON Selector where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
+instance ToJSON Template where toJSON = genericToJSON defaultOptions { omitNothingFields  = True }
 
