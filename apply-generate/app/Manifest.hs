@@ -5,7 +5,7 @@ module Manifest where
 
 import GHC.Generics (Generic)
 import Data.Aeson.Key (fromString)
-import Data.Aeson (ToJSON, toJSON, toJSONKey, omitNothingFields, genericToJSON, defaultOptions, object, (.=))
+import Data.Aeson (ToJSON, toJSON, omitNothingFields, genericToJSON, defaultOptions, object, (.=))
 
 data Manifest = Manifest
   {
