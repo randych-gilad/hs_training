@@ -1,18 +1,19 @@
-module Html (wrapHtml) where
+module Html (mkTag, renderHtml, wrapHtml) where
 
-wrapHtml :: String -> String -> String
-wrapHtml contentHead contentBody =
+wrapHtml :: String -> String -> Html
+wrapHtml contentHead contentBody = Html $
   "<html>" 
-  <> wrapHead contentHead
-  <> wrapBody contentBody
+  <> mkTag "head" contentHead
+  <> mkTag "body" contentBody
   <> "</html>"
-wrapHead :: String -> String
-wrapHead content =
-  "<head>"
-  <> content
-  <> "</head>"
-wrapBody :: String -> String
-wrapBody content =
-  "<body>"
-  <> content
-  <> "</body>"
+
+mkTag :: String -> String -> String
+mkTag tag content =
+  case tag of
+    "head" -> tagContent
+    "body" -> tagContent
+    "p" -> tagContent
+    _ -> error "Illegal tag"
+    where tagContent = "<" <> tag <> ">" <> content <> "</" <> tag <> ">"
+
+newtype Html = Html { renderHtml :: String }

@@ -1,6 +1,6 @@
 module Main where
 
-import qualified Html
+import Html (wrapHtml, renderHtml)
 
 main :: IO ()
-main = putStrLn $ Html.wrapHtml "Kekus page" "Kekus..."
+main = putStrLn $ renderHtml $ wrapHtml "Kekus page" "Kekus..."
