@@ -1,4 +1,4 @@
-module Html where
+module Html (wrapHtml) where
 
 wrapHtml :: String -> String -> String
 wrapHtml contentHead contentBody = "<html>" <> wrapHead contentHead <> wrapBody contentBody <> "</html>"
