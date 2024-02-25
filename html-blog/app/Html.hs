@@ -1,19 +1,23 @@
-module Html (mkTag, renderHtml, wrapHtml) where
+module Html (renderHtml, wrapHtml, Tag) where
 
 wrapHtml :: String -> String -> Html
 wrapHtml contentHead contentBody = Html $
-  "<html>" 
-  <> mkTag "head" contentHead
-  <> mkTag "body" contentBody
-  <> "</html>"
+  "<html>"
+  ++ (\(Head content) -> content) (mkTag "head" contentHead)
+  ++ (\(Body content) -> content) (mkTag "body" contentBody)
+  ++ "</html>"
 
-mkTag :: String -> String -> String
+mkTag :: String -> String -> Tag
 mkTag tag content =
   case tag of
-    "head" -> tagContent
-    "body" -> tagContent
-    "p" -> tagContent
-    _ -> error "Illegal tag"
-    where tagContent = "<" <> tag <> ">" <> content <> "</" <> tag <> ">"
+    "head" -> Head (tagContent content)
+    "body" -> Body (tagContent content)
+    "p"    -> P (tagContent content)
+    _      -> error "Illegal tag"
+    where tagContent c = "<" <> tag <> ">" <> c <> "</" <> tag <> ">"
 
 newtype Html = Html { renderHtml :: String }
+
+data Tag =
+  Head String | Body String | P String
+  deriving Show
