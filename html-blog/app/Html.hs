@@ -1,8 +1,18 @@
 module Html (wrapHtml) where
 
 wrapHtml :: String -> String -> String
-wrapHtml contentHead contentBody = "<html>" <> wrapHead contentHead <> wrapBody contentBody <> "</html>"
+wrapHtml contentHead contentBody =
+  "<html>" 
+  <> wrapHead contentHead
+  <> wrapBody contentBody
+  <> "</html>"
 wrapHead :: String -> String
-wrapHead content = "<head>" <> content <> "</head>"
+wrapHead content =
+  "<head>"
+  <> content
+  <> "</head>"
 wrapBody :: String -> String
-wrapBody content = "<body>" <> content <> "</body>"
+wrapBody content =
+  "<body>"
+  <> content
+  <> "</body>"
