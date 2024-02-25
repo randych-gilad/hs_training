@@ -1,4 +1,6 @@
 module Main where
 
+import qualified Html
+
 main :: IO ()
-main = putStrLn "Hello, Haskell!"
+main = putStrLn $ Html.wrapHtml "Kekus..."
